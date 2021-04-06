@@ -5,7 +5,7 @@ class CreateMovements < ActiveRecord::Migration[6.1]
       t.references :user, null: false, foreign_key: true
       t.references :category, null: false, foreign_key: true
       t.date :movement_date
-      t. :amount
+      t.decimal :amount
 
       t.timestamps
     end
