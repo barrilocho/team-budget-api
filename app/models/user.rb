@@ -15,4 +15,9 @@ class User < ApplicationRecord
   belongs_to :family
   has_many :movements
   
+  validates :email, presence:true
+  validates :first_name, presence:true
+  validates :last_name, presence:true
+  validates :auth_token, presence:true
+  validates :family_id, presence:true
 end
