@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: families
+#
+#  id         :bigint           not null, primary key
+#  alias      :string
+#  members    :integer
+#  balance    :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 require 'rails_helper'
 
 RSpec.describe Family, type: :model do

@@ -18,7 +18,7 @@ gem "puma", "~> 5.0"
 
 # The ruby implementation of the GraphQL language.
 gem "graphql"
-
+gem "annotate"
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
