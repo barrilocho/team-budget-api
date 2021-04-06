@@ -8,6 +8,7 @@
 #  balance    :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  code       :string
 #
 require 'rails_helper'
 
