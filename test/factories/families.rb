@@ -10,12 +10,11 @@
 #  code       :string
 #  alias_name :string
 #
-class Family < ApplicationRecord
-  has_many :users
-  has_many :categories
-
-  validates :alias_name, presence:true
-  validates :members, presence:true
-  validates :balance, presence:true
-  validates :code, presence:true
+FactoryBot.define do
+  factory :family do
+    code { Faker::Code.ean8 }
+    alias_name { Faker::Internet.user_name}
+    members { 1 }
+    balance { 1 }
+  end
 end

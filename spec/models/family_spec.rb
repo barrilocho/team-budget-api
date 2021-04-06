@@ -3,12 +3,12 @@
 # Table name: families
 #
 #  id         :bigint           not null, primary key
-#  alias      :string
 #  members    :integer
 #  balance    :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  code       :string
+#  alias_name :string
 #
 require 'rails_helper'
 
