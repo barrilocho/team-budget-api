@@ -1,19 +1,20 @@
 require "rails_helper"
+require "byebug"
 
 RSpec.describe 'Families', type: :request do
 
   describe 'GET /families' do
+    let!(:families) { create_list(:family, 10) }
     before { get '/families' }
-
     it 'should return OK' do 
       payload = JSON.parse(response.body)
       expect(payload).not_to be_empty
-      expect(payload['api']).to eq('OK')
+      expect(response).to have_http_status(200)
     end
   end
   describe "with data in DB" do
 
-    let(:families) { create_list(:family, 10) }
+    let!(:families) { create_list(:family, 10) }
     before { get '/families' }
     it "should return all the families" do  
       payload = JSON.parse(response.body)
@@ -21,14 +22,13 @@ RSpec.describe 'Families', type: :request do
       expect(response).to have_http_status(200)
     end
   end
-  describe "GET /family/{id}" do
-    let(:family) { create_list(:family, 1) }
-
+  describe "GET /families/{id}" do
+    let!(:family) { create(:family) }
     it "should return a family" do  
-      before { get "/family/#{family.id}" }
+      get "/families/#{family.id}"
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
-      expect(payload['id']).to_be eq(family.id)
+      expect(payload['id']).to eq(family.id)
       expect(response).to have_http_status(200)
     end
   end

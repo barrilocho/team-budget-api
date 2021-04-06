@@ -12,9 +12,9 @@
 #
 FactoryBot.define do
   factory :family do
-    code { Faker::Code.ean8 }
+    code { Faker::Code.ean }
     alias_name { Faker::Internet.user_name}
     members { 1 }
-    balance { 1 }
+    balance { 0 }
   end
 end

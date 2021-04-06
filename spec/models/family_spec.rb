@@ -16,7 +16,7 @@ RSpec.describe Family, type: :model do
   describe "Validations" do
     it "validate presence of required fields" do
       should validate_presence_of(:code)
-      should validate_presence_of(:alias)
+      should validate_presence_of(:alias_name)
       should validate_presence_of(:members)
       should validate_presence_of(:balance)
     end
