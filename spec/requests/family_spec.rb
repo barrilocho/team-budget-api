@@ -35,22 +35,26 @@ RSpec.describe 'Families', type: :request do
   describe "POST /families" do
     it "should create a family" do 
       req_payload = {
-        alias_name: "Barrios",
-        code: "12345",
-        members: 1,
-        balance: 0
+        family: {
+          alias_name: "Barrios",
+          code: "12345",
+          members: 1,
+          balance: 0
+        }
       } 
       post "/families", params: req_payload
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
-      expect(payload['id']).to_not be_empty
+      expect(payload['id']).to_not be_nil
       expect(response).to have_http_status(:created)
     end
     it "should return error message on invalid family" do 
       req_payload = {
-        alias_name: "Barrios",
-        members: 1,
-        balance: 0
+        family:{
+          alias_name: "Barrios",
+          members: 1,
+          balance: 0
+        }
       } 
       post "/families", params: req_payload
       payload = JSON.parse(response.body)
@@ -59,16 +63,18 @@ RSpec.describe 'Families', type: :request do
       expect(response).to have_http_status(:unprocessable_entity)
     end
   end
-  describe "PUT /families/#{id}" do
+  describe "PUT /families/id" do
     let!(:family) {create(:family)}
     it "should update a family" do  
       req_payload = {
-        alias_name: "Barrios test",
-        code: "12345678",
-        members: 1,
-        balance: 0
+        family:{
+          alias_name: "Barrios test",
+          code: "12345678",
+          members: 1,
+          balance: 0
+        }
       } 
-      post "/families/#{family.id}", params: req_payload
+      put "/families/#{family.id}", params: req_payload
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
       expect(payload['id']).to eq(family.id)
@@ -76,11 +82,13 @@ RSpec.describe 'Families', type: :request do
     end
     it "should return error message on invalid family update" do 
       req_payload = {
-        alias_name: nil,
-        members: nil,
-        balance: 0
+        family: {
+          alias_name: nil,
+          members: nil,
+          balance: 0
+        }
       } 
-      post "/families/#{family.id}", params: req_payload
+      put "/families/#{family.id}", params: req_payload
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
       expect(payload['error']).to_not be_empty
