@@ -5,8 +5,9 @@ RSpec.describe 'Categories', type: :request do
 
   describe 'GET /categories' do
     let!(:categories) { create_list(:category, 10) }
+    
     before { get '/categories' }
-    it 'should return OK' do 
+    it 'should return OK' do
       payload = JSON.parse(response.body)
       expect(payload).not_to be_empty
       expect(response).to have_http_status(200)
@@ -32,12 +33,12 @@ RSpec.describe 'Categories', type: :request do
     end
   end
   describe "POST /categories" do
+    let!(:family) { create(:family) }
     it "should create a category" do 
-      let!(:family) { create(:family) }
       req_payload = {
         category: {
           name: "Entretenimiento",
-          type: 1,
+          category_type: 1,
           family_id: family.id
         }
       } 
@@ -51,7 +52,7 @@ RSpec.describe 'Categories', type: :request do
       req_payload = {
         category:{
           name: "Entretenimiento",
-          type: 1
+          category_type: 1
         }
       } 
       post "/categories", params: req_payload
@@ -67,7 +68,7 @@ RSpec.describe 'Categories', type: :request do
       req_payload = {
         category:{
           name: "Diversión",
-          type: 2
+          category_type: 2
         }
       } 
       put "/categories/#{category.id}", params: req_payload
@@ -80,8 +81,7 @@ RSpec.describe 'Categories', type: :request do
       req_payload = {
         category: {
           name: "Diversión",
-          type: 2,
-          family_id: nil
+          category_type: nil
         }
       } 
       put "/categories/#{category.id}", params: req_payload

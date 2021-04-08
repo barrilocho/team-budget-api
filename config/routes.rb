@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   get '/health', to: 'health#health'
 
   resources :families, only: [:index, :show, :create, :update]
+  resources :categories, only: [:index, :show, :create, :update]
 end

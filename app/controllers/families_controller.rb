@@ -8,7 +8,6 @@ class FamiliesController < ApplicationController
     render json: {error: e.message}, status: :unprocessable_entity
   end
 
-
   def index
     @families = Family.all
     render json: @families, status: :ok
