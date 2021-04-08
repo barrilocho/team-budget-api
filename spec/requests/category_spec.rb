@@ -4,8 +4,7 @@ require "byebug"
 RSpec.describe 'Categories', type: :request do
 
   describe 'GET /categories' do
-    let!(:categories) { create_list(:category, 10) }
-    
+    let!(:categories) { create_list(:category, 5) }
     it 'should return OK' do
       get '/categories'
       payload = JSON.parse(response.body)
@@ -13,19 +12,16 @@ RSpec.describe 'Categories', type: :request do
       expect(response).to have_http_status(200)
     end
     describe  'Search' do
-      let!(:family) { create(:family) }
       let!(:category_one) { create(:category_family, name: "Entretenimiento" ) }
       let!(:category_two) { create(:category_family, name: "Diversión", ) }
       let!(:category_three) { create(:category, name: "Entretenimiento") }
       
-     
       it 'should filter categories by title and family' do
-        
-        get "/categories?family_id=#{family.id}"
+        get "/categories?family_id=#{Family.first.id}"
         payload = JSON.parse(response.body)
         expect(payload).not_to be_empty
-        expect(payload.size).to eq(2)
-        expect(payload.map {|p| p["id"]}.sort).to eq([category_one.id, category_two.id].sort)
+        expect(payload.size).to eq(3)
+        expect(payload.map {|p| p["id"]}.sort).to include(category_one.id, category_two.id)
         expect(response).to have_http_status(200)
       end
     end

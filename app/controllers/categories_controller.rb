@@ -12,6 +12,10 @@ class CategoriesController < ApplicationController
   # GET /families
   def index 
     @categories = Category.all 
+    # byebug
+    if !params[:family_id].nil? && params[:family_id].present?
+      @categories = CategorySearchService.search(@categories, params[:family_id])
+    end
     render json: @categories, status: :ok
   end
 
@@ -40,6 +44,10 @@ class CategoriesController < ApplicationController
   
   def update_params
     params.required(:category).permit(:name, :category_type)
+  end
+
+  def category_params
+
   end
 
 end
