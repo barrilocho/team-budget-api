@@ -16,7 +16,7 @@ class CategoriesController < ApplicationController
     if !params[:family_id].nil? && params[:family_id].present?
       @categories = CategorySearchService.search(@categories, params[:family_id])
     end
-    render json: @categories, status: :ok
+    render json: @categories.includes(:family), status: :ok
   end
 
   #  GET /families/{id}
