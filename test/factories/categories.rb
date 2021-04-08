@@ -12,7 +12,12 @@
 FactoryBot.define do
   factory :category do
     name { Faker::Internet.user_name }
-    category_type { 2 }
+    category_type { [1, 2].sample }
     family
+  end
+  factory :category_family, class: 'Category' do
+    name { Faker::Internet.user_name }
+    category_type { [1, 2].sample }
+    family {Family.first}
   end
 end
