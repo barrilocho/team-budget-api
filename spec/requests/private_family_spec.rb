@@ -13,11 +13,11 @@ RSpec.describe "Families with authentication", type: :request do
       context "when requisting user other's family" do
         before { get "/families/#{other_user_family.id}", headers: auth_headears }
         context "payload" do
-          subject { JSON.parse(response.body) }
+          subject { payload }
           it { is_expected.to include(:id) }
         end
         context "response" do
-          subject { resoponse }
+          subject { response }
           it { is_expected.to have_http_status(:ok) }
         end
       end
@@ -31,5 +31,11 @@ RSpec.describe "Families with authentication", type: :request do
   end
   describe "PUT /families/{id}" do
     
+  end
+
+  private 
+  
+  def payload
+    JSON.parse(response.body).with_indifferent_access
   end
 end

@@ -1,5 +1,7 @@
 class FamiliesController < ApplicationController
 
+  before_action :authenticate_user!, only: [:create, :update]
+
   rescue_from Exception do |e|
     render json: {error: e.message}, status: :internal_error
   end
@@ -21,15 +23,21 @@ class FamiliesController < ApplicationController
 
   #POST /families
   def create
+
     @family = Family.create!(create_params)
     render json: @family, status: :created
   end
 
   #PUT /families/{id}
   def update
-    @family = Family.find(params[:id])
-    @family.update!(update_params)
-    render json: @family, status: :ok
+    if Current.user.family_id == params[:id] 
+      @family = Family.find(params[:id])
+      @family.update!(update_params)
+      render json: @family, status: :ok
+    else
+      render json: {error: "Unauthorized"}, status: :unauthorize
+    end
+    
   end
 
   private
@@ -41,4 +49,19 @@ class FamiliesController < ApplicationController
   def update_params
     params.required(:family).permit(:alias_name)
   end
+
+  def authenticate_user!
+    token_regex = /Bearer (\w+)/
+    
+    headers = request.headers 
+
+    if headers['Authorization'].present? && headers['Authorization'].match(token_regex)
+      token = headers['Authorization'].match(token_regex)[1]
+      if(Current.user = User.find_by_auth_token(token))   #if user exist resturn and continue if not return unathorize
+        return
+      end
+    end
+    render json: {error: "Unauthorized"}, status: :unauthorize
+  end
+
 end
