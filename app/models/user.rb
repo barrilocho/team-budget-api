@@ -20,4 +20,12 @@ class User < ApplicationRecord
   validates :last_name, presence:true
   validates :auth_token, presence:true
   validates :family_id, presence:true
+
+  after_initialize :generate_auth_token
+
+  def generate_auth_token
+    unless auth_token.present?
+      self.auth_token = TokenGenerationService.generate
+    end
+  end
 end
