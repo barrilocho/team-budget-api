@@ -35,7 +35,7 @@ class FamiliesController < ApplicationController
 
   #PUT /families/{id}
   def update
-    if Current.user.family_id == params[:id] 
+    if Current.user.family_id == params[:id].to_i
       @family = Family.find(params[:id])
       @family.update!(update_params)
       render json: @family, status: :ok

@@ -15,6 +15,7 @@ RSpec.describe 'Families', type: :request do
   describe "with data in DB" do
 
     let!(:families) { create_list(:family, 10) }
+    
     before { get '/families' }
     it "should return all the families" do  
       payload = JSON.parse(response.body)
@@ -23,9 +24,12 @@ RSpec.describe 'Families', type: :request do
     end
   end
   describe "GET /families/{id}" do
+
     let!(:family) { create(:family) }
+    let!(:user) { create(:user, family_id: family.id) }
+    let!(:auth_headears) {{ 'Authorization' => "Bearer #{user.auth_token}"}}
     it "should return a family" do  
-      get "/families/#{family.id}"
+      get "/families/#{family.id}", headers: auth_headears
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
       expect(payload['id']).to eq(family.id)
@@ -33,6 +37,8 @@ RSpec.describe 'Families', type: :request do
     end
   end
   describe "POST /families" do
+    let!(:user) { create(:user) }
+    let!(:auth_headears) {{ 'Authorization' => "Bearer #{user.auth_token}"}}
     it "should create a family" do 
       req_payload = {
         family: {
@@ -42,7 +48,7 @@ RSpec.describe 'Families', type: :request do
           balance: 0
         }
       } 
-      post "/families", params: req_payload
+      post "/families", params: req_payload, headers: auth_headears
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
       expect(payload['id']).to_not be_nil
@@ -56,7 +62,7 @@ RSpec.describe 'Families', type: :request do
           balance: 0
         }
       } 
-      post "/families", params: req_payload
+      post "/families", params: req_payload, headers: auth_headears
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
       expect(payload['error']).to_not be_empty
@@ -65,6 +71,8 @@ RSpec.describe 'Families', type: :request do
   end
   describe "PUT /families/id" do
     let!(:family) {create(:family)}
+    let!(:user) { create(:user, family_id: family.id) }
+    let!(:auth_headears) {{ 'Authorization' => "Bearer #{user.auth_token}"}}
     it "should update a family" do  
       req_payload = {
         family:{
@@ -74,7 +82,7 @@ RSpec.describe 'Families', type: :request do
           balance: 0
         }
       } 
-      put "/families/#{family.id}", params: req_payload
+      put "/families/#{family.id}", params: req_payload, headers: auth_headears
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
       expect(payload['id']).to eq(family.id)
@@ -88,7 +96,7 @@ RSpec.describe 'Families', type: :request do
           balance: 0
         }
       } 
-      put "/families/#{family.id}", params: req_payload
+      put "/families/#{family.id}", params: req_payload, headers: auth_headears
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
       expect(payload['error']).to_not be_empty
