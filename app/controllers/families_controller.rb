@@ -1,6 +1,7 @@
+
 class FamiliesController < ApplicationController
 
-  before_action :authenticate_user!, only: [:create, :update]
+  before_action :authenticate_user!, only: [:create, :update, :show]
 
   rescue_from Exception do |e|
     render json: {error: e.message}, status: :internal_error
@@ -16,9 +17,13 @@ class FamiliesController < ApplicationController
   end
 
   #GET /family/{id}
-  def show
+  def show 
     @family = Family.find(params[:id])
-    render json: @family, status: :ok
+    if(Current.user && (Current.user.family_id == @family.id))
+      render json: @family, status: :ok
+    else
+      render json: {error: "Not Found"}, status: :not_found
+    end
   end
 
   #POST /families
@@ -52,7 +57,6 @@ class FamiliesController < ApplicationController
 
   def authenticate_user!
     token_regex = /Bearer (\w+)/
-    
     headers = request.headers 
 
     if headers['Authorization'].present? && headers['Authorization'].match(token_regex)

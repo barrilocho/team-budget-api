@@ -12,7 +12,6 @@ class CategoriesController < ApplicationController
   # GET /families
   def index 
     @categories = Category.all 
-    # byebug
     if !params[:family_id].nil? && params[:family_id].present?
       @categories = CategorySearchService.search(@categories, params[:family_id])
     end
