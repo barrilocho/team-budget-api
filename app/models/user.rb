@@ -19,7 +19,6 @@ class User < ApplicationRecord
   validates :first_name, presence:true
   validates :last_name, presence:true
   validates :auth_token, presence:true
-  validates :family_id, presence:true
 
   after_initialize :generate_auth_token
 
