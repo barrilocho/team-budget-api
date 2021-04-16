@@ -26,53 +26,37 @@ RSpec.describe 'Families', type: :request do
   describe "GET /families/{id}" do
 
     let!(:family) { create(:family) }
-    let!(:user) { create(:user, family_id: family.id) }
-    let!(:auth_headears) {{ 'Authorization' => "Bearer #{user.auth_token}"}}
+    let!(:user) { create(:user, username: "usernametest", password: "lalala123", family_id: family.id) }
+    let!(:auth_headers) {
+      credentials = {
+        username: "#{user['username']}", 
+        password: "lalala123"
+      }
+      token = login_as(credentials)
+      { 'Authorization' => "Bearer #{token}"}
+    }
+    # let!(:auth_headears) {{ 'Authorization' => "Bearer #{user.auth_token}"}}
     it "should return a family" do  
-      get "/families/#{family.id}", headers: auth_headears
+      get "/families/#{family.id}", headers: auth_headers
+      # get "/families/#{family.id}"
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
       expect(payload['id']).to eq(family.id)
       expect(response).to have_http_status(200)
     end
   end
-  describe "POST /families" do
-    let!(:user) { create(:user) }
-    let!(:auth_headears) {{ 'Authorization' => "Bearer #{user.auth_token}"}}
-    it "should create a family" do 
-      req_payload = {
-        family: {
-          alias_name: "Barrios",
-          code: "12345",
-          members: 1,
-          balance: 0
-        }
-      } 
-      post "/families", params: req_payload, headers: auth_headears
-      payload = JSON.parse(response.body)
-      expect(payload).to_not be_empty
-      expect(payload['id']).to_not be_nil
-      expect(response).to have_http_status(:created)
-    end
-    it "should return error message on invalid family" do 
-      req_payload = {
-        family:{
-          alias_name: "Barrios",
-          members: 1,
-          balance: 0
-        }
-      } 
-      post "/families", params: req_payload, headers: auth_headears
-      payload = JSON.parse(response.body)
-      expect(payload).to_not be_empty
-      expect(payload['error']).to_not be_empty
-      expect(response).to have_http_status(:unprocessable_entity)
-    end
-  end
+  
   describe "PUT /families/id" do
     let!(:family) {create(:family)}
     let!(:user) { create(:user, family_id: family.id) }
-    let!(:auth_headears) {{ 'Authorization' => "Bearer #{user.auth_token}"}}
+    let!(:auth_headers) {
+      credentials = {
+        username: "#{user['username']}", 
+        password: "test123"
+      }
+      token = login_as(credentials)
+      { 'Authorization' => "Bearer #{token}"}
+    }
     it "should update a family" do  
       req_payload = {
         family:{
@@ -82,7 +66,8 @@ RSpec.describe 'Families', type: :request do
           balance: 0
         }
       } 
-      put "/families/#{family.id}", params: req_payload, headers: auth_headears
+      put "/families/#{family.id}", params: req_payload, headers: auth_headers
+      # put "/families/#{family.id}", params: req_payload
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
       expect(payload['id']).to eq(family.id)
@@ -96,7 +81,8 @@ RSpec.describe 'Families', type: :request do
           balance: 0
         }
       } 
-      put "/families/#{family.id}", params: req_payload, headers: auth_headears
+      put "/families/#{family.id}", params: req_payload, headers: auth_headers
+      # put "/families/#{family.id}", params: req_payload
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
       expect(payload['error']).to_not be_empty

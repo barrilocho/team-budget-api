@@ -1,9 +1,9 @@
-
+require "byebug"
 class FamiliesController < ApplicationController
 
-  include Secured
-
-  before_action :authenticate_user!, only: [:create, :update, :show]
+  # include Secured
+  # before_action :authorized, only: []
+  before_action :authorized, only: [:create, :update, :show]
 
   rescue_from Exception do |e|
     render json: {error: e.message}, status: :internal_error
