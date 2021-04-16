@@ -1,5 +1,5 @@
 class CategoriesController < ApplicationController
-  before_action :authorized, only: []
+  before_action :authorized, only: [:create, :update, :index, :show]
 
   rescue_from Exception do |e|
     render json: {error: e.message}, status: :internal_error
@@ -22,24 +22,34 @@ class CategoriesController < ApplicationController
   #  GET /families/{id}
   def show
     @category = Category.find(params[:id])
-    render json: @category, status: :ok
+    if(Current.user && (Current.user.family_id == @category.family_id))
+      render json: @category, status: :ok
+    else
+      render json: {error: "Not Found"}, status: :not_found
+    end
   end
 
   def create 
-    @category = Category.create!(create_params)
+    new_user = create_params;
+    new_user["family_id"] = Current.user.family_id
+    @category = Category.create!(new_user)
     render json: @category, status: :created
   end
 
   def update 
     @category = Category.find(params[:id])
-    @category.update!(update_params)
-    render json: @category, status: :ok
+    if Current.user.family_id == @category.family_id
+      @category.update!(update_params)
+      render json: @category, status: :ok
+    else
+      render json: {error: "Not Found"}, status: :not_found
+    end
   end
 
   private
 
   def create_params
-    params.required(:category).permit(:name, :family_id, :category_type)
+    params.required(:category).permit(:name, :category_type)
   end
   
   def update_params
