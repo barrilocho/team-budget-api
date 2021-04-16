@@ -10,15 +10,14 @@
 #  family_id  :bigint           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  username   :string
 #
 class User < ApplicationRecord
   belongs_to :family
   has_many :movements
-  
-  validates :email, presence:true
-  validates :first_name, presence:true
-  validates :last_name, presence:true
-  validates :auth_token, presence:true
+
+
+  validates_presence_of :email, :first_name, :last_name, :auth_token
 
   after_initialize :generate_auth_token
 
