@@ -6,7 +6,6 @@
 #  email           :string
 #  first_name      :string
 #  last_name       :string
-#  auth_token      :string
 #  family_id       :bigint           not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
