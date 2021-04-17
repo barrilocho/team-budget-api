@@ -34,7 +34,8 @@ class FamiliesController < ApplicationController
 
   #POST /families
   def create
-    @family = Family.create!(create_params)
+    @family = Family.create!(create_params) 
+
     render json: @family, status: :created
   end
 

@@ -111,7 +111,6 @@ RSpec.describe 'Categories', type: :request do
       } 
       put "/categories/#{category.id}", params: req_payload,  headers: auth_headers
       payload = JSON.parse(response.body)
-      puts payload
       expect(payload).to_not be_empty
       expect(payload['error']).to_not be_empty
       expect(response).to have_http_status(:unprocessable_entity)
