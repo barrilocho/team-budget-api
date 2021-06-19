@@ -1,5 +1,5 @@
 class CategoriesController < ApplicationController
-  # before_action :authorized, only: [:create, :update, :index, :show]
+  before_action :authorized, only: [:create, :update, :index, :show]
 
   rescue_from Exception do |e|
     render json: {error: e.message}, status: :internal_error
